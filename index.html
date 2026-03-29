@@ -13,7 +13,7 @@
         --muted: #9fb0cc;
         --line: rgba(255, 255, 255, 0.08);
         --accent: #38bdf8;
-        --accent-2: #22c55e;
+        --accent-strong: #2563eb;
         --danger: #ef4444;
         --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
         --radius: 18px;
@@ -42,6 +42,10 @@
         text-decoration: none;
       }
 
+      button {
+        font: inherit;
+      }
+
       .container {
         width: min(var(--max), calc(100% - 32px));
         margin: 0 auto;
@@ -50,7 +54,7 @@
       .nav {
         position: sticky;
         top: 0;
-        z-index: 10;
+        z-index: 20;
         backdrop-filter: blur(10px);
         background: rgba(8, 16, 29, 0.72);
         border-bottom: 1px solid var(--line);
@@ -94,7 +98,7 @@
       }
 
       .btn-primary {
-        background: linear-gradient(135deg, var(--accent), #2563eb);
+        background: linear-gradient(135deg, var(--accent), var(--accent-strong));
         color: white;
         box-shadow: var(--shadow);
       }
@@ -356,11 +360,109 @@
         font-size: 14px;
       }
 
+      .modal {
+        position: fixed;
+        inset: 0;
+        z-index: 50;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background: rgba(0, 0, 0, 0.65);
+        backdrop-filter: blur(6px);
+      }
+
+      .modal.active {
+        display: flex;
+      }
+
+      .modal-card {
+        width: min(680px, 100%);
+        background: linear-gradient(180deg, var(--panel), var(--panel-2));
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        box-shadow: var(--shadow);
+        padding: 28px;
+        position: relative;
+      }
+
+      .modal-close {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        width: 38px;
+        height: 38px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.03);
+        color: white;
+        cursor: pointer;
+      }
+
+      .modal-title {
+        margin: 0 0 8px;
+        font-size: 30px;
+      }
+
+      .modal-subtitle {
+        margin: 0 0 22px;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .demo-form {
+        display: grid;
+        gap: 14px;
+        text-align: left;
+      }
+
+      .demo-form label {
+        display: grid;
+        gap: 8px;
+        color: var(--text);
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .demo-form input,
+      .demo-form textarea {
+        width: 100%;
+        padding: 14px 16px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.03);
+        color: white;
+        outline: none;
+      }
+
+      .demo-form input::placeholder,
+      .demo-form textarea::placeholder {
+        color: #7f90ac;
+      }
+
+      .demo-form textarea {
+        resize: vertical;
+        min-height: 130px;
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+
+      .form-actions {
+        display: flex;
+        justify-content: flex-start;
+        margin-top: 6px;
+      }
+
       @media (max-width: 960px) {
         .hero-grid,
         .grid-2,
         .output,
-        .feature-grid {
+        .feature-grid,
+        .form-grid {
           grid-template-columns: 1fr;
         }
 
@@ -403,7 +505,7 @@
           </p>
 
           <div class="hero-actions">
-            <a class="btn btn-primary" href="#demo">Request Demo</a>
+            <button class="btn btn-primary" type="button" data-open-demo>Request Demo</button>
             <a class="btn btn-secondary" href="#output">See Example Output</a>
           </div>
 
@@ -564,9 +666,7 @@
             team release with confidence.
           </p>
 
-          <a class="btn btn-primary" href="https://mail.google.com/mail/?view=cm&fs=1&to=vooabi@gmail.com&su=Request%20Demo%20for%20Vooabi">
-            Email Us
-          </a>
+          <button class="btn btn-primary" type="button" data-open-demo>Open Demo Request Form</button>
 
           <div class="cta-note">
             Or contact us directly at
@@ -576,10 +676,105 @@
       </div>
     </section>
 
+    <div class="modal" id="demoModal" aria-hidden="true">
+      <div class="modal-card">
+        <button class="modal-close" type="button" id="closeDemoModal" aria-label="Close demo request form">✕</button>
+
+        <h2 class="modal-title">Request a Demo</h2>
+        <p class="modal-subtitle">
+          Tell us a bit about your team and workflow. We’ll review your request and get back to you.
+        </p>
+
+        <form
+          class="demo-form"
+          action="YOUR_FORM_ENDPOINT"
+          method="POST"
+        >
+          <div class="form-grid">
+            <label>
+              Full Name
+              <input type="text" name="name" placeholder="Your full name" required />
+            </label>
+
+            <label>
+              Work Email
+              <input type="email" name="email" placeholder="you@company.com" required />
+            </label>
+          </div>
+
+          <div class="form-grid">
+            <label>
+              Company
+              <input type="text" name="company" placeholder="Company name" />
+            </label>
+
+            <label>
+              Team Size
+              <input type="text" name="team_size" placeholder="e.g. 5-20 engineers" />
+            </label>
+          </div>
+
+          <label>
+            What would you like to see in the demo?
+            <textarea
+              name="message"
+              placeholder="Tell us about your QA workflow, current pain points, or what you'd like to see."
+              required
+            ></textarea>
+          </label>
+
+          <div class="form-actions">
+            <button class="btn btn-primary" type="submit">Submit Request</button>
+          </div>
+        </form>
+
+        <div class="cta-note" style="text-align:left; margin-top:16px;">
+          Prefer email? Contact us directly at
+          <a href="mailto:vooabi@gmail.com?subject=Request%20Demo%20for%20Vooabi">vooabi@gmail.com</a>
+        </div>
+      </div>
+    </div>
+
     <footer class="footer">
       <div class="container">
         © 2026 Vooabi. AI-powered QA intelligence for modern software teams.
       </div>
     </footer>
+
+    <script>
+      const demoModal = document.getElementById('demoModal');
+      const openButtons = document.querySelectorAll('[data-open-demo]');
+      const closeButton = document.getElementById('closeDemoModal');
+
+      function openDemoModal() {
+        demoModal.classList.add('active');
+        demoModal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeDemoModal() {
+        demoModal.classList.remove('active');
+        demoModal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+
+      openButtons.forEach((button) => {
+        button.addEventListener('click', openDemoModal);
+      });
+
+      closeButton.addEventListener('click', closeDemoModal);
+
+      demoModal.addEventListener('click', (event) => {
+        if (event.target === demoModal) {
+          closeDemoModal();
+        }
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && demoModal.classList.contains('active')) {
+          closeDemoModal();
+        }
+      });
+    </script>
   </body>
 </html>
