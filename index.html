@@ -15,6 +15,7 @@
         --accent: #38bdf8;
         --accent-strong: #2563eb;
         --danger: #ef4444;
+        --success: #22c55e;
         --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
         --radius: 18px;
         --max: 1120px;
@@ -42,7 +43,9 @@
         text-decoration: none;
       }
 
-      button {
+      button,
+      input,
+      textarea {
         font: inherit;
       }
 
@@ -106,6 +109,12 @@
       .btn-primary:hover {
         transform: translateY(-1px);
         filter: brightness(1.05);
+      }
+
+      .btn-primary:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none;
       }
 
       .btn-secondary {
@@ -457,6 +466,24 @@
         margin-top: 6px;
       }
 
+      .form-status {
+        margin-top: 14px;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .form-status.success {
+        color: var(--success);
+      }
+
+      .form-status.error {
+        color: var(--danger);
+      }
+
+      .hidden-field {
+        display: none;
+      }
+
       @media (max-width: 960px) {
         .hero-grid,
         .grid-2,
@@ -687,9 +714,15 @@
 
         <form
           class="demo-form"
-          action="YOUR_FORM_ENDPOINT"
+          id="demoForm"
+          action="https://api.web3forms.com/submit"
           method="POST"
         >
+          <input type="hidden" name="access_key" value="147e82b3-e64a-44b4-b688-33db0f311f14" />
+          <input type="hidden" name="subject" value="New Vooabi Demo Request" />
+          <input type="hidden" name="from_name" value="Vooabi Website" />
+          <input type="checkbox" name="botcheck" class="hidden-field" tabindex="-1" autocomplete="off" />
+
           <div class="form-grid">
             <label>
               Full Name
@@ -724,8 +757,10 @@
           </label>
 
           <div class="form-actions">
-            <button class="btn btn-primary" type="submit">Submit Request</button>
+            <button class="btn btn-primary" type="submit" id="submitButton">Submit Request</button>
           </div>
+
+          <div id="formStatus" class="form-status"></div>
         </form>
 
         <div class="cta-note" style="text-align:left; margin-top:16px;">
@@ -745,6 +780,9 @@
       const demoModal = document.getElementById('demoModal');
       const openButtons = document.querySelectorAll('[data-open-demo]');
       const closeButton = document.getElementById('closeDemoModal');
+      const demoForm = document.getElementById('demoForm');
+      const submitButton = document.getElementById('submitButton');
+      const formStatus = document.getElementById('formStatus');
 
       function openDemoModal() {
         demoModal.classList.add('active');
@@ -773,6 +811,41 @@
       document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape' && demoModal.classList.contains('active')) {
           closeDemoModal();
+        }
+      });
+
+      demoForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        formStatus.textContent = '';
+        formStatus.className = 'form-status';
+        submitButton.disabled = true;
+        submitButton.textContent = 'Sending...';
+
+        const formData = new FormData(demoForm);
+
+        try {
+          const response = await fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            body: formData
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            formStatus.textContent = 'Thanks — your demo request has been submitted successfully.';
+            formStatus.classList.add('success');
+            demoForm.reset();
+          } else {
+            formStatus.textContent = 'Something went wrong. Please try again or email us directly at vooabi@gmail.com.';
+            formStatus.classList.add('error');
+          }
+        } catch (error) {
+          formStatus.textContent = 'Something went wrong. Please try again or email us directly at vooabi@gmail.com.';
+          formStatus.classList.add('error');
+        } finally {
+          submitButton.disabled = false;
+          submitButton.textContent = 'Submit Request';
         }
       });
     </script>
