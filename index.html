@@ -2,89 +2,574 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vooabi — QA Decision Engine</title>
+    <style>
+      :root {
+        --bg: #0b1020;
+        --panel: #121a2b;
+        --panel-2: #0f1727;
+        --text: #f3f7ff;
+        --muted: #9fb0cc;
+        --line: rgba(255,255,255,0.08);
+        --accent: #38bdf8;
+        --accent-2: #22c55e;
+        --danger: #ef4444;
+        --shadow: 0 10px 30px rgba(0,0,0,0.35);
+        --radius: 18px;
+        --max: 1120px;
+      }
+
+      * { box-sizing: border-box; }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        font-family: Inter, Arial, Helvetica, sans-serif;
+        background:
+          radial-gradient(circle at top, rgba(56,189,248,0.12), transparent 28%),
+          linear-gradient(180deg, #08101d 0%, #0b1020 100%);
+        color: var(--text);
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .container {
+        width: min(var(--max), calc(100% - 32px));
+        margin: 0 auto;
+      }
+
+      .nav {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        backdrop-filter: blur(10px);
+        background: rgba(8, 16, 29, 0.72);
+        border-bottom: 1px solid var(--line);
+      }
+
+      .nav-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 0;
+      }
+
+      .brand {
+        font-size: 22px;
+        font-weight: 800;
+        letter-spacing: 0.2px;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 18px;
+        align-items: center;
+      }
+
+      .nav-links a {
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 14px 22px;
+        border-radius: 12px;
+        font-weight: 700;
+        border: 1px solid transparent;
+        cursor: pointer;
+        transition: 0.2s ease;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, var(--accent), #2563eb);
+        color: white;
+        box-shadow: var(--shadow);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-1px);
+        filter: brightness(1.05);
+      }
+
+      .btn-secondary {
+        border-color: var(--line);
+        color: var(--text);
+        background: rgba(255,255,255,0.02);
+      }
+
+      .btn-secondary:hover {
+        background: rgba(255,255,255,0.04);
+      }
+
+      .hero {
+        padding: 72px 0 44px;
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 28px;
+        align-items: center;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 13px;
+        margin-bottom: 18px;
+        background: rgba(255,255,255,0.03);
+      }
+
+      h1 {
+        margin: 0 0 16px;
+        font-size: clamp(38px, 6vw, 64px);
+        line-height: 1.02;
+        letter-spacing: -1.8px;
+      }
+
+      .hero p {
+        margin: 0 0 24px;
+        color: var(--muted);
+        font-size: 18px;
+        line-height: 1.7;
+        max-width: 640px;
+      }
+
+      .hero-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 22px;
+      }
+
+      .mini-proof {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .mini-proof span {
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.03);
+        border: 1px solid var(--line);
+      }
+
+      .hero-card {
+        background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        padding: 18px;
+        box-shadow: var(--shadow);
+      }
+
+      .hero-card img {
+        width: 100%;
+        display: block;
+        border-radius: 16px;
+      }
+
+      .section {
+        padding: 26px 0;
+      }
+
+      .section-title {
+        text-align: center;
+        margin: 0 0 12px;
+        font-size: 32px;
+        letter-spacing: -0.8px;
+      }
+
+      .section-subtitle {
+        text-align: center;
+        color: var(--muted);
+        max-width: 760px;
+        margin: 0 auto 28px;
+        line-height: 1.7;
+      }
+
+      .grid-2 {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+      }
+
+      .card {
+        background: linear-gradient(180deg, var(--panel), var(--panel-2));
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 24px;
+        box-shadow: var(--shadow);
+      }
+
+      .card h3 {
+        margin: 0 0 14px;
+        font-size: 22px;
+      }
+
+      .card p {
+        margin: 0 0 16px;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .list {
+        margin: 0;
+        padding-left: 18px;
+        color: var(--text);
+        line-height: 1.85;
+      }
+
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .feature {
+        background: linear-gradient(180deg, var(--panel), var(--panel-2));
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 18px;
+      }
+
+      .feature .icon {
+        font-size: 22px;
+        margin-bottom: 12px;
+      }
+
+      .feature h4 {
+        margin: 0 0 8px;
+        font-size: 17px;
+      }
+
+      .feature p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .output {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      .ticket {
+        color: var(--muted);
+        font-size: 14px;
+        margin-bottom: 14px;
+      }
+
+      .decision-box {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin: 16px 0 22px;
+      }
+
+      .metric {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 14px;
+      }
+
+      .metric .label {
+        display: block;
+        color: var(--muted);
+        font-size: 12px;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.7px;
+      }
+
+      .metric .value {
+        font-size: 18px;
+        font-weight: 800;
+      }
+
+      .danger {
+        color: var(--danger);
+      }
+
+      .success {
+        color: var(--accent-2);
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      .cta {
+        margin-top: 10px;
+        text-align: center;
+      }
+
+      .cta-wrap {
+        background: linear-gradient(180deg, rgba(56,189,248,0.1), rgba(37,99,235,0.08));
+        border: 1px solid rgba(56,189,248,0.2);
+        border-radius: 24px;
+        padding: 34px 24px;
+        box-shadow: var(--shadow);
+      }
+
+      .cta-wrap h2 {
+        margin: 0 0 10px;
+        font-size: 34px;
+      }
+
+      .cta-wrap p {
+        margin: 0 auto 20px;
+        max-width: 700px;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .footer {
+        padding: 28px 0 50px;
+        color: var(--muted);
+        text-align: center;
+        font-size: 14px;
+      }
+
+      @media (max-width: 960px) {
+        .hero-grid,
+        .grid-2,
+        .output,
+        .feature-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .decision-box {
+          grid-template-columns: 1fr;
+        }
+
+        .nav-links {
+          display: none;
+        }
+
+        .hero {
+          padding-top: 52px;
+        }
+      }
+    </style>
   </head>
 
-  <body style="background:#0b0b0b; color:white; font-family:Arial; text-align:center; padding:40px;">
+  <body>
+    <nav class="nav">
+      <div class="container nav-inner">
+        <div class="brand">Vooabi</div>
+        <div class="nav-links">
+          <a href="#problem">Problem</a>
+          <a href="#solution">Solution</a>
+          <a href="#output">Example Output</a>
+          <a href="#demo">Request Demo</a>
+        </div>
+      </div>
+    </nav>
 
-    <!-- HERO -->
-    <h1 style="font-size:44px; margin-bottom:10px;">
-      Stop Guessing What to Test
-    </h1>
+    <header class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow">AI-Powered QA Intelligence for Engineering Teams</div>
+          <h1>Stop Guessing What to Test</h1>
+          <p>
+            Turn Jira tickets into test strategy, automation plans, and release decisions
+            in seconds — not hours.
+          </p>
 
-    <p style="color:#aaa; font-size:18px; max-width:700px; margin:0 auto 30px;">
-      Turn Jira tickets into test strategy, automation plans, and release decisions in seconds — not hours.
-    </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#demo">Request Demo</a>
+            <a class="btn btn-secondary" href="#output">See Example Output</a>
+          </div>
 
-    <button style="padding:14px 28px; font-size:16px; border:none; border-radius:6px; cursor:pointer; background:#00c2ff; color:#000; font-weight:bold;">
-      Request Demo
-    </button>
+          <div class="mini-proof">
+            <span>Jira-driven</span>
+            <span>Automation strategy</span>
+            <span>Release risk scoring</span>
+          </div>
+        </div>
 
-    <hr style="margin:60px 0; border-color:#222;" />
+        <div class="hero-card">
+          <img src="/src/assets/hero.png" alt="AI-powered QA dashboard interface" />
+        </div>
+      </div>
+    </header>
 
-    <!-- PROBLEM -->
-    <h2>The Problem</h2>
+    <section id="problem" class="section">
+      <div class="container">
+        <h2 class="section-title">The Problem</h2>
+        <p class="section-subtitle">
+          QA engineers spend hours analyzing Jira tickets, deciding what to test,
+          what to automate, and whether a release is safe. That process is slow,
+          repetitive, and inconsistent across teams.
+        </p>
 
-    <p style="color:#aaa; max-width:700px; margin:0 auto 20px;">
-      QA engineers spend hours analyzing Jira tickets:
-    </p>
+        <div class="grid-2">
+          <div class="card">
+            <h3>Manual QA Reasoning</h3>
+            <p>Every ticket requires manual thinking before testing even begins.</p>
+            <ul class="list">
+              <li>What should we test?</li>
+              <li>What are the edge cases?</li>
+              <li>Should this be automated?</li>
+              <li>Is it safe to release?</li>
+            </ul>
+          </div>
 
-    <ul style="list-style:none; padding:0; color:#ccc;">
-      <li>• What should we test?</li>
-      <li>• What are the edge cases?</li>
-      <li>• Should this be automated?</li>
-      <li>• Is it safe to release?</li>
-    </ul>
+          <div class="card">
+            <h3>Inconsistent Decisions</h3>
+            <p>Release quality depends too much on individual experience and speed.</p>
+            <ul class="list">
+              <li>Missed edge cases</li>
+              <li>Uneven test coverage</li>
+              <li>Slow QA cycles</li>
+              <li>Risky release decisions</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    <p style="color:#888; margin-top:20px;">
-      This process is slow, repetitive, and inconsistent.
-    </p>
+    <section id="solution" class="section">
+      <div class="container">
+        <h2 class="section-title">The Solution</h2>
+        <p class="section-subtitle">
+          Vooabi turns Jira tickets into structured QA intelligence so teams can move
+          faster with more confidence.
+        </p>
 
-    <hr style="margin:60px 0; border-color:#222;" />
+        <div class="feature-grid">
+          <div class="feature">
+            <div class="icon">✔</div>
+            <h4>Test Scenarios</h4>
+            <p>Generate structured test ideas and execution-ready direction automatically.</p>
+          </div>
 
-    <!-- SOLUTION -->
-    <h2>The Solution</h2>
+          <div class="feature">
+            <div class="icon">⚙</div>
+            <h4>Automation Strategy</h4>
+            <p>Decide UI vs API coverage and the right automation approach quickly.</p>
+          </div>
 
-    <p style="color:#aaa; max-width:700px; margin:0 auto 20px;">
-      Vooabi turns every Jira ticket into structured QA intelligence:
-    </p>
+          <div class="feature">
+            <div class="icon">📊</div>
+            <h4>Risk Score</h4>
+            <p>Understand release risk with a clear severity signal and explanation.</p>
+          </div>
 
-    <ul style="list-style:none; padding:0; color:#ccc;">
-      <li>✔ Test scenarios generated automatically</li>
-      <li>✔ Automation strategy (UI vs API)</li>
-      <li>✔ Risk score (0–100)</li>
-      <li>✔ Release decision (GO / CAUTION / BLOCK)</li>
-    </ul>
+          <div class="feature">
+            <div class="icon">🚦</div>
+            <h4>Release Recommendation</h4>
+            <p>Know whether to GO, proceed with CAUTION, or BLOCK a release.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    <hr style="margin:60px 0; border-color:#222;" />
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">Why It Matters</h2>
+        <p class="section-subtitle">
+          Save hours of manual QA analysis, standardize decision-making, and reduce
+          release risk — instantly.
+        </p>
+      </div>
+    </section>
 
-    <!-- WHY IT MATTERS -->
-    <h2>Why It Matters</h2>
+    <section id="output" class="section">
+      <div class="container">
+        <h2 class="section-title">Example Output</h2>
+        <p class="section-subtitle">
+          A single Jira ticket can be transformed into a structured QA decision in seconds.
+        </p>
 
-    <p style="color:#aaa; max-width:700px; margin:0 auto;">
-      Save hours of manual QA analysis and reduce release risk — instantly.
-    </p>
+        <div class="output">
+          <div class="card">
+            <div class="ticket">Jira Ticket: PROJ-7 — Password Reset Flow</div>
 
-    <hr style="margin:60px 0; border-color:#222;" />
+            <div class="decision-box">
+              <div class="metric">
+                <span class="label">Risk Level</span>
+                <span class="value">HIGH (70/100)</span>
+              </div>
 
-    <!-- EXAMPLE -->
-    <h2>Example Output</h2>
+              <div class="metric">
+                <span class="label">Release Decision</span>
+                <span class="value danger">BLOCK</span>
+              </div>
 
-    <p><strong>Jira Ticket:</strong> PROJ-7 — Password Reset Flow</p>
+              <div class="metric">
+                <span class="label">Automation</span>
+                <span class="value">Hybrid</span>
+              </div>
+            </div>
 
-    <p><strong>Risk Level:</strong> HIGH (70/100)</p>
-    <p><strong>Release Decision:</strong> <span style="color:#ff4d4d;">BLOCK</span></p>
-    <p><strong>Automation Strategy:</strong> Hybrid (UI 40% / API 60%)</p>
+            <h3>Key Risks</h3>
+            <ul class="list">
+              <li>Reset link expiration behavior unclear</li>
+              <li>Potential security issues in token handling</li>
+              <li>Missing validation for repeated reset requests</li>
+            </ul>
+          </div>
 
-    <p style="margin-top:20px;"><strong>Key Risks:</strong></p>
+          <div class="card">
+            <h3>Recommended Actions</h3>
+            <ul class="list">
+              <li>Validate reset link expiration logic</li>
+              <li>Add API tests for token security</li>
+              <li>Cover edge cases such as expired and reused reset links</li>
+            </ul>
 
-    <ul style="list-style:none; padding:0; color:#ccc;">
-      <li>• Reset link expiration unclear</li>
-      <li>• Token security risk</li>
-      <li>• Missing validation for repeated requests</li>
-    </ul>
+            <h3 style="margin-top: 24px;">Outcome</h3>
+            <p>
+              This feature should <span class="danger"><strong>not</strong></span> be
+              released until security and edge cases are validated.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
 
+    <section id="demo" class="section cta">
+      <div class="container">
+        <div class="cta-wrap">
+          <h2>Request a Demo</h2>
+          <p>
+            See how Vooabi can automate QA decisions in your workflow and help your
+            team release with confidence.
+          </p>
+          <a class="btn btn-primary" href="mailto:demo@vooabi.com?subject=Request%20Demo%20for%20Vooabi">
+            Request Demo
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container">
+        © 2026 Vooabi. AI-powered QA intelligence for modern software teams.
+      </div>
+    </footer>
   </body>
 </html>
