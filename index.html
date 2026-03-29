@@ -11,16 +11,18 @@
         --panel-2: #0f1727;
         --text: #f3f7ff;
         --muted: #9fb0cc;
-        --line: rgba(255,255,255,0.08);
+        --line: rgba(255, 255, 255, 0.08);
         --accent: #38bdf8;
         --accent-2: #22c55e;
         --danger: #ef4444;
-        --shadow: 0 10px 30px rgba(0,0,0,0.35);
+        --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
         --radius: 18px;
         --max: 1120px;
       }
 
-      * { box-sizing: border-box; }
+      * {
+        box-sizing: border-box;
+      }
 
       html {
         scroll-behavior: smooth;
@@ -30,7 +32,7 @@
         margin: 0;
         font-family: Inter, Arial, Helvetica, sans-serif;
         background:
-          radial-gradient(circle at top, rgba(56,189,248,0.12), transparent 28%),
+          radial-gradient(circle at top, rgba(56, 189, 248, 0.12), transparent 28%),
           linear-gradient(180deg, #08101d 0%, #0b1020 100%);
         color: var(--text);
       }
@@ -105,11 +107,11 @@
       .btn-secondary {
         border-color: var(--line);
         color: var(--text);
-        background: rgba(255,255,255,0.02);
+        background: rgba(255, 255, 255, 0.02);
       }
 
       .btn-secondary:hover {
-        background: rgba(255,255,255,0.04);
+        background: rgba(255, 255, 255, 0.04);
       }
 
       .hero {
@@ -133,7 +135,7 @@
         color: var(--muted);
         font-size: 13px;
         margin-bottom: 18px;
-        background: rgba(255,255,255,0.03);
+        background: rgba(255, 255, 255, 0.03);
       }
 
       h1 {
@@ -169,12 +171,12 @@
       .mini-proof span {
         padding: 8px 12px;
         border-radius: 999px;
-        background: rgba(255,255,255,0.03);
+        background: rgba(255, 255, 255, 0.03);
         border: 1px solid var(--line);
       }
 
       .hero-card {
-        background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
         border: 1px solid var(--line);
         border-radius: 24px;
         padding: 18px;
@@ -288,7 +290,7 @@
       }
 
       .metric {
-        background: rgba(255,255,255,0.03);
+        background: rgba(255, 255, 255, 0.03);
         border: 1px solid var(--line);
         border-radius: 14px;
         padding: 14px;
@@ -312,22 +314,14 @@
         color: var(--danger);
       }
 
-      .success {
-        color: var(--accent-2);
-      }
-
-      .muted {
-        color: var(--muted);
-      }
-
       .cta {
         margin-top: 10px;
         text-align: center;
       }
 
       .cta-wrap {
-        background: linear-gradient(180deg, rgba(56,189,248,0.1), rgba(37,99,235,0.08));
-        border: 1px solid rgba(56,189,248,0.2);
+        background: linear-gradient(180deg, rgba(56, 189, 248, 0.1), rgba(37, 99, 235, 0.08));
+        border: 1px solid rgba(56, 189, 248, 0.2);
         border-radius: 24px;
         padding: 34px 24px;
         box-shadow: var(--shadow);
@@ -343,6 +337,16 @@
         max-width: 700px;
         color: var(--muted);
         line-height: 1.7;
+      }
+
+      .cta-note {
+        margin-top: 14px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .cta-note a {
+        color: var(--accent);
       }
 
       .footer {
@@ -559,9 +563,15 @@
             See how Vooabi can automate QA decisions in your workflow and help your
             team release with confidence.
           </p>
-          <a class="btn btn-primary" href="mailto:vooabi@gmail.com?subject=Request%20Demo%20for%20Vooabi">
-            Request Demo
+
+          <a class="btn btn-primary" href="https://mail.google.com/mail/?view=cm&fs=1&to=vooabi@gmail.com&su=Request%20Demo%20for%20Vooabi">
+            Email Us
           </a>
+
+          <div class="cta-note">
+            Or contact us directly at
+            <a href="mailto:vooabi@gmail.com?subject=Request%20Demo%20for%20Vooabi">vooabi@gmail.com</a>
+          </div>
         </div>
       </div>
     </section>
